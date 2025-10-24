@@ -1,8 +1,11 @@
+"use client";
 import { Button } from "@/components/ui/button";
-import prisma from "@/lib/db";
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
 
-const Home = async () => {
-  const users = await prisma.user.findMany();
+const Home = () => {
+  const trpc = useTRPC();
+  const { data: users } = useQuery(trpc.getUsers.queryOptions());
   return (
     <div className="min-h-screen min-w-screen flex items-center justify-center">
       <Button>Click the node</Button>
