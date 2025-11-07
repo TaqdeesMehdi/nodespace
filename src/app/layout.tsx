@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Poppins, Fira_Code } from "next/font/google";
+import { Oxanium, Fira_Code } from "next/font/google";
 import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/client";
 import { Toaster } from "@/components/ui/sonner";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const oxanium = Oxanium({
+  variable: "--font-oxanium",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -30,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} ${firaCode.variable} antialiased font-sans`}
+        className={`${oxanium.variable} ${firaCode.variable} antialiased font-sans`}
       >
         <TRPCReactProvider>
           <Toaster />
