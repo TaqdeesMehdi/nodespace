@@ -3,7 +3,7 @@ import { Oxanium, Fira_Code } from "next/font/google";
 import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/client";
 import { Toaster } from "@/components/ui/sonner";
-
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 const oxanium = Oxanium({
   variable: "--font-oxanium",
   subsets: ["latin"],
@@ -32,8 +32,10 @@ export default function RootLayout({
         className={`${oxanium.variable} ${firaCode.variable} antialiased font-sans`}
       >
         <TRPCReactProvider>
-          <Toaster />
-          {children}
+          <NuqsAdapter>
+            <Toaster />
+            {children}
+          </NuqsAdapter>
         </TRPCReactProvider>
       </body>
     </html>

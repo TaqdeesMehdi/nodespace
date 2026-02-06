@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useState, useEffect } from "react"; // Add this
 import {
   Card,
   CardContent,
@@ -24,13 +25,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+
 const loginSchema = z.object({
   email: z.email("Please enter a valid email address"),
   password: z.string().min(1, "password is required"),
 });
+
 type LoginFormValue = z.infer<typeof loginSchema>;
+
 export function LoginForm() {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+
   const form = useForm<LoginFormValue>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -38,6 +44,10 @@ export function LoginForm() {
       password: "",
     },
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const onSubmit = async (values: LoginFormValue) => {
     await authClient.signIn.email(
@@ -53,10 +63,12 @@ export function LoginForm() {
         onError: (ctx) => {
           toast.error(ctx.error.message);
         },
-      }
+      },
     );
   };
+
   const isPending = form.formState.isSubmitting;
+
   return (
     <div className="flex flex-col gap-6">
       <Card>
@@ -68,36 +80,38 @@ export function LoginForm() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid gap-6">
-                <div className="flex flex-col gap-4">
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    disabled={isPending}
-                    type="button"
-                  >
-                    <Image
-                      src="/github.svg"
-                      alt="Github"
-                      width={20}
-                      height={20}
-                    />
-                    Continue with github
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    disabled={isPending}
-                    type="button"
-                  >
-                    <Image
-                      src="/google.svg"
-                      alt="google"
-                      width={20}
-                      height={20}
-                    />
-                    Continue with google
-                  </Button>
-                </div>
+                {mounted && ( // Only render images after mount
+                  <div className="flex flex-col gap-4">
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      disabled={isPending}
+                      type="button"
+                    >
+                      <Image
+                        src="/github.svg"
+                        alt="Github"
+                        width={20}
+                        height={20}
+                      />
+                      Continue with github
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      disabled={isPending}
+                      type="button"
+                    >
+                      <Image
+                        src="/google.svg"
+                        alt="google"
+                        width={20}
+                        height={20}
+                      />
+                      Continue with google
+                    </Button>
+                  </div>
+                )}
                 <div className="grid gap-6">
                   <FormField
                     control={form.control}
