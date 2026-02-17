@@ -254,6 +254,17 @@ export const EntityItem = ({
   isRemoving,
   className,
 }: EntityItemProps) => {
+  const handleRemove = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isRemoving) {
+      return;
+    }
+    if (onRemove) {
+      await onRemove();
+    }
+  };
+
   return (
     <Link href={href} prefetch>
       <Card
@@ -293,7 +304,7 @@ export const EntityItem = ({
                     align="end"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleRemove}>
                       <TrashIcon className="size-4" />
                       Delete
                     </DropdownMenuItem>
