@@ -7,12 +7,21 @@ import prisma from "@/lib/db";
 import { generateSlug } from "random-word-slugs";
 import z from "zod";
 import { PAGINATION } from "@/config/constants";
+import type { Node, Edge } from "@xyflow/react";
+import { NodeType } from "@/generated/prisma";
 export const workflowsRouter = createTRPCRouter({
   create: protectedProcedure.mutation(({ ctx }) => {
     return prisma.workflow.create({
       data: {
         name: generateSlug(3),
         userId: ctx.auth.user.id,
+        nodes: {
+          create: {
+            type: NodeType.INITIAL,
+            position: { x: 0, y: 0 },
+            name: NodeType.INITIAL,
+          },
+        },
       },
     });
   }),
@@ -36,13 +45,21 @@ export const workflowsRouter = createTRPCRouter({
     }),
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .query(({ ctx, input }) => {
-      return prisma.workflow.findUniqueOrThrow({
+    .query(async ({ ctx, input }) => {
+      const workflow = await prisma.workflow.findUniqueOrThrow({
         where: {
           id: input.id,
           userId: ctx.auth.user.id,
         },
+        include: { nodes: true, connections: true },
       });
+
+      const nodes: Node[] = workflow.nodes.map((node) => ({
+        id: node.id,
+        type: node.type,
+        position: node.position as { x: number; y: number },
+        data: (node.data as Record<string, unknown>) || {},
+      }));
     }),
   getMany: protectedProcedure
     .input(
