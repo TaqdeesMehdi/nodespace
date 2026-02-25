@@ -64,6 +64,12 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
         proOptions={{
           hideAttribution: true,
         }}
+        // panOnScroll
+        // panOnDrag={false}
+        // selectionOnDrag
+        //if this feels laggy remove it
+        snapGrid={[10, 10]}
+        snapToGrid
       >
         <Background />
         <Controls />
