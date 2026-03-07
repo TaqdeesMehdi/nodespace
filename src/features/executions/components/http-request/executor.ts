@@ -1,10 +1,24 @@
 import type { NodeExecutor } from "@/features/executions/types";
 import { NonRetriableError } from "inngest";
 import ky, { type Options as KyOptions } from "ky";
+import Handlebars from "handlebars";
+
+//TODO: if http post method gives any error try this method and remove the noEscape:true from endpoint and resolved variable
+/****
+ Handlebar.registerHelper("json",(context)=>{
+ const jsonString=JSON.stringify(context,null,2);
+ const safeString=new Handlebars.SafeString(jsonString);
+ return safeString;
+ })
+ */
+
+Handlebars.registerHelper("json", (context) =>
+  JSON.stringify(context, null, 2),
+);
 type HttpRequestData = {
-  variableName?: string;
-  endpoint?: string;
-  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  variableName: string;
+  endpoint: string;
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: string;
 };
 export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
@@ -21,12 +35,21 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
       "Variable Name is not configured for this http resquest",
     );
   }
+  if (!data.method) {
+    throw new NonRetriableError("Method not configured");
+  }
   const result = await step.run("http-request", async () => {
-    const endpoint = data.endpoint!;
-    const method = data.method || "GET";
+    const endpoint = Handlebars.compile(data.endpoint, { noEscape: true })(
+      context,
+    );
+    const method = data.method;
     const options: KyOptions = { method };
     if (["POST", "PUT", "PATCH"].includes(method)) {
-      options.body = data.body;
+      const resolved = Handlebars.compile(data.body || "{}", {
+        noEscape: true,
+      })(context);
+      JSON.parse(resolved);
+      options.body = resolved;
       options.headers = {
         "Content-Type": "application/json",
       };
@@ -44,16 +67,9 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
         data: responseData,
       },
     };
-    if (data.variableName) {
-      return {
-        ...context,
-        [data.variableName]: responsePayload,
-      };
-    }
-    //fallback to direct httpResponse for backward compatibility
     return {
       ...context,
-      ...responsePayload,
+      [data.variableName]: responsePayload,
     };
   });
   return result;
