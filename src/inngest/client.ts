@@ -1,3 +1,6 @@
 import { Inngest } from "inngest";
-
-export const inngest = new Inngest({ id: "nodespace" });
+import { realtimeMiddleware } from "@inngest/realtime/middleware";
+export const inngest = new Inngest({
+  id: "nodespace",
+  middleware: [realtimeMiddleware()],
+});
