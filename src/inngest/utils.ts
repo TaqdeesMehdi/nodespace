@@ -2,6 +2,7 @@ import toposort from "toposort";
 import { NonRetriableError } from "inngest";
 
 import { NodeModel, ConnectionModel } from "@/generated/prisma";
+import { inngest } from "./client";
 export const topologicalSort = (
   nodes: NodeModel[],
   connections: ConnectionModel[],
@@ -37,11 +38,21 @@ export const topologicalSort = (
     sortedNodeIds = [...new Set(sortedNodeIds)];
   } catch (error) {
     if (error instanceof Error && error.message.includes("Cyclic")) {
-      throw new NonRetriableError("Workflow contains a repitative cycle");
+      throw new NonRetriableError("Workflow contains a repetitive cycle");
     }
     throw error;
   }
   //map sorted IDs back to node objects
   const nodeMap = new Map(nodes.map((n) => [n.id, n]));
   return sortedNodeIds.map((id) => nodeMap.get(id)!).filter(Boolean);
+};
+
+export const sendWorkflowExecution = async (data: {
+  workflowId: string;
+  [key: string]: any;
+}) => {
+  return inngest.send({
+    name: "workflows/execute.workflow",
+    data,
+  });
 };

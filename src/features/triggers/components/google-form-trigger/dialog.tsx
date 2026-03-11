@@ -68,7 +68,7 @@ export const GoogleFormTriggerDialog = ({
             <h4 className="font-medium text-sm">Setup instructions:</h4>
             <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
               <li>Open your Google Form</li>
-              <li>Click the three dots menu ⇨ Script editor</li>
+              <li>Click the three dots menu ⇨ Apps Script</li>
               <li>Copy and paste the script below</li>
               <li>Replace WEBHOOK_URL with your webhook URL above</li>
               <li>Save and Click "Triggers" ⇨ Add Trigger</li>
