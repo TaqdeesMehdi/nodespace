@@ -17,9 +17,9 @@ Handlebars.registerHelper("json", (context) =>
   JSON.stringify(context, null, 2),
 );
 type HttpRequestData = {
-  variableName: string;
-  endpoint: string;
-  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  variableName?: string;
+  endpoint?: string;
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: string;
 };
 export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
@@ -35,37 +35,40 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
       status: "loading",
     }),
   );
-  if (!data.endpoint) {
-    await publish(
-      httpRequestChannel().status({
-        nodeId,
-        status: "error",
-      }),
-    );
-    throw new NonRetriableError("HTTP Request node: No endpoint configured");
-  }
-  if (!data.variableName) {
-    await publish(
-      httpRequestChannel().status({
-        nodeId,
-        status: "error",
-      }),
-    );
-    throw new NonRetriableError(
-      "Variable Name is not configured for this http request",
-    );
-  }
-  if (!data.method) {
-    await publish(
-      httpRequestChannel().status({
-        nodeId,
-        status: "error",
-      }),
-    );
-    throw new NonRetriableError("Method not configured");
-  }
+
   try {
     const result = await step.run("http-request", async () => {
+      if (!data.endpoint) {
+        await publish(
+          httpRequestChannel().status({
+            nodeId,
+            status: "error",
+          }),
+        );
+        throw new NonRetriableError(
+          "HTTP Request node: No endpoint configured",
+        );
+      }
+      if (!data.variableName) {
+        await publish(
+          httpRequestChannel().status({
+            nodeId,
+            status: "error",
+          }),
+        );
+        throw new NonRetriableError(
+          "Variable Name is not configured for this http request",
+        );
+      }
+      if (!data.method) {
+        await publish(
+          httpRequestChannel().status({
+            nodeId,
+            status: "error",
+          }),
+        );
+        throw new NonRetriableError("Method not configured");
+      }
       const endpoint = Handlebars.compile(data.endpoint, { noEscape: true })(
         context,
       );
