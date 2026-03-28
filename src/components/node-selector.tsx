@@ -49,6 +49,24 @@ const executionNodes: NodeTypeOption[] = [
     description: "Makes a HTTP request",
     icon: GlobeIcon,
   },
+  {
+    type: NodeType.GEMINI,
+    label: "Gemini",
+    description: "Uses google gemini to generate text",
+    icon: "/gemini.svg",
+  },
+  {
+    type: NodeType.OPENAI,
+    label: "OpenAI",
+    description: "Uses OpenAI to generate text",
+    icon: "/openai.svg",
+  },
+  {
+    type: NodeType.ANTHROPIC,
+    label: "Anthropic",
+    description: "Uses Anthropic to generate text",
+    icon: "/anthropic.svg",
+  },
 ];
 
 interface NodeSelectorProps {
@@ -106,7 +124,10 @@ export function NodeSelector({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetTrigger asChild>{children}</SheetTrigger>
-      <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto">
+      <SheetContent
+        side="right"
+        className="w-full sm:max-w-md overflow-y-auto custom-scroll"
+      >
         <SheetHeader>
           <SheetTitle>What triggers this workflow?</SheetTitle>
           <SheetDescription>
