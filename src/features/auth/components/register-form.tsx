@@ -52,16 +52,16 @@ export function RegisterForm() {
         name: values.email,
         email: values.email,
         password: values.password,
-        callbackURL: "/",
+        callbackURL: "/home",
       },
       {
         onSuccess: () => {
-          router.push("/");
+          router.push("/home");
         },
         onError: (ctx) => {
           toast.error(ctx.error.message);
         },
-      }
+      },
     );
   };
   const isPending = form.formState.isSubmitting;

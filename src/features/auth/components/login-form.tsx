@@ -54,11 +54,11 @@ export function LoginForm() {
       {
         email: values.email,
         password: values.password,
-        callbackURL: "/",
+        callbackURL: "/home",
       },
       {
         onSuccess: () => {
-          router.push("/");
+          router.push("/home");
         },
         onError: (ctx) => {
           toast.error(ctx.error.message);

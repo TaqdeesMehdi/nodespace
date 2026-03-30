@@ -14,12 +14,11 @@ const nextConfig: NextConfig = {
     maxInactiveAge: 60 * 1000,
     pagesBufferLength: 5,
   },
-
   async redirects() {
     return [
       {
         source: "/",
-        destination: "/workflows",
+        destination: "/home",
         permanent: false,
       },
     ];
