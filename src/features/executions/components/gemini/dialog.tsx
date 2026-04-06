@@ -30,6 +30,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
+import Image from "next/image";
+
+import { useCredentialByTypes } from "@/features/credentials/hooks/use-credentials";
+import { CredentialType } from "@/generated/prisma";
 const formSchema = z.object({
   variableName: z
     .string()
@@ -38,6 +42,7 @@ const formSchema = z.object({
       message:
         "Variable name must start with a letter or underscore and it should contain only letters, numbers, and underscores",
     }),
+  credentialId: z.string().min(1, "Credential is required"),
   systemPrompt: z.string().optional(),
   userPrompt: z.string().min(1, "User prompt is required"),
 });
@@ -55,10 +60,14 @@ export const GeminiDialog = ({
   onSubmit,
   defaultValues = {},
 }: GeminiDialogProps) => {
+  const { data: credentials, isLoading: isLoadingCredentials } =
+    useCredentialByTypes(CredentialType.GEMINI);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       variableName: defaultValues.variableName || "",
+      credentialId: defaultValues.credentialId || "",
+
       systemPrompt: defaultValues.systemPrompt || "",
       userPrompt: defaultValues.userPrompt || "",
     },
@@ -68,6 +77,8 @@ export const GeminiDialog = ({
       form.reset({
         variableName: defaultValues.variableName || "",
         systemPrompt: defaultValues.systemPrompt || "",
+        credentialId: defaultValues.credentialId || "",
+
         userPrompt: defaultValues.userPrompt || "",
       });
     }
@@ -110,7 +121,43 @@ export const GeminiDialog = ({
                 </FormItem>
               )}
             />
-
+            {/**Credential type */}
+            <FormField
+              control={form.control}
+              name="credentialId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Gemini Credential</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={isLoadingCredentials || !credentials?.length}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a credential" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {credentials?.map((credential) => (
+                        <SelectItem key={credential.id} value={credential.id}>
+                          <div className="flex items-center gap-2">
+                            <Image
+                              src="/gemini.svg"
+                              alt="Gemini"
+                              width={16}
+                              height={16}
+                            />
+                            {credential.name}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {/**System prompt field */}
             <FormField
               control={form.control}

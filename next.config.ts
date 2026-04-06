@@ -2,18 +2,15 @@ import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  outputFileTracingRoot: __dirname,
-  // Add these for Windows stability
-  experimental: {
-    // Disable problematic features on Windows
-    caseSensitiveRoutes: false,
-  },
+  // outputFileTracingRoot: __dirname,
+  // experimental: {
+  //   caseSensitiveRoutes: false,
+  // },
 
-  // Increase timeout for slower file operations on Windows
-  onDemandEntries: {
-    maxInactiveAge: 60 * 1000,
-    pagesBufferLength: 5,
-  },
+  // onDemandEntries: {
+  //   maxInactiveAge: 60 * 1000,
+  //   pagesBufferLength: 5,
+  // },
   async redirects() {
     return [
       {
