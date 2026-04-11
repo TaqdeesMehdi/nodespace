@@ -4,7 +4,7 @@ import ky, { type Options as KyOptions } from "ky";
 import Handlebars from "handlebars";
 import { httpRequestChannel } from "@/inngest/channels/http-request";
 
-//TODO: if http post method gives any error try this method and remove the noEscape:true from endpoint and resolved variable
+//Might change when get Error: if http post method gives any error try this method and remove the noEscape:true from endpoint and resolved variable
 /****
  Handlebar.registerHelper("json",(context)=>{
  const jsonString=JSON.stringify(context,null,2);
