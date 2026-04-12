@@ -48,7 +48,37 @@ export function LoginForm() {
   useEffect(() => {
     setMounted(true);
   }, []);
+  const signInGithub = async () => {
+    await authClient.signIn.social(
+      {
+        provider: "github",
+      },
+      {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError: () => {
+          toast.error("Something went wrong");
+        },
+      },
+    );
+  };
 
+  const signInGoogle = async () => {
+    await authClient.signIn.social(
+      {
+        provider: "google",
+      },
+      {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError: () => {
+          toast.error("Something went wrong");
+        },
+      },
+    );
+  };
   const onSubmit = async (values: LoginFormValue) => {
     await authClient.signIn.email(
       {
@@ -83,6 +113,7 @@ export function LoginForm() {
                 {mounted && ( // Only render images after mount
                   <div className="flex flex-col gap-4">
                     <Button
+                      onClick={signInGithub}
                       variant="outline"
                       className="w-full"
                       disabled={isPending}
@@ -97,6 +128,7 @@ export function LoginForm() {
                       Continue with github
                     </Button>
                     <Button
+                      onClick={signInGoogle}
                       variant="outline"
                       className="w-full"
                       disabled={isPending}
