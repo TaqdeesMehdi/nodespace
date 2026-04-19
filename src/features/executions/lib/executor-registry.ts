@@ -9,6 +9,8 @@ import { openAiExecutor } from "../components/openai/executor";
 import { anthropicExecutor } from "../components/anthropic/executor";
 import { discordExecutor } from "../components/discord/executor";
 import { slackExecutor } from "../components/slack/executor";
+import { replicateVideoExecutor } from "../components/replicate-video/executor";
+import { youtubeUploadExecutor } from "../components/youtube-upload/executor";
 export const executorRegistry: Record<NodeType, NodeExecutor> = {
   [NodeType.MANUAL_TRIGGER]: manualTriggerExecutor,
   [NodeType.INITIAL]: manualTriggerExecutor,
@@ -20,6 +22,8 @@ export const executorRegistry: Record<NodeType, NodeExecutor> = {
   [NodeType.ANTHROPIC]: anthropicExecutor,
   [NodeType.DISCORD]: discordExecutor,
   [NodeType.SLACK]: slackExecutor,
+  [NodeType.REPLICATE_VIDEO]: replicateVideoExecutor,
+  [NodeType.YOUTUBE_UPLOAD]: youtubeUploadExecutor,
 };
 export const getExecutor = (type: NodeType): NodeExecutor => {
   const executor = executorRegistry[type];

@@ -90,6 +90,8 @@ enum CredentialType{
   OPENAI
   ANTHROPIC
   GEMINI
+  REPLICATE
+  YOUTUBE
 }
 model Workflow{
   id String @id @default(cuid())
@@ -115,6 +117,8 @@ enum NodeType{
   OPENAI
   DISCORD
   SLACK
+  REPLICATE_VIDEO
+  YOUTUBE_UPLOAD
 }
 
 model Node {

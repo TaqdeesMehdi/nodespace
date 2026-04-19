@@ -62,6 +62,16 @@ const credentialTypeOptions = [
     label: "Gemini",
     logo: "/gemini.svg",
   },
+  {
+    value: CredentialType.REPLICATE,
+    label: "Replicate",
+    logo: "/replicate.svg",
+  },
+  {
+    value: CredentialType.YOUTUBE,
+    label: "YouTube",
+    logo: "/youtube.svg",
+  },
 ];
 
 interface CredentialFormProps {

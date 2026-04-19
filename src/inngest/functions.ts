@@ -13,6 +13,8 @@ import { openAiChannel } from "./channels/openai";
 import { anthropicChannel } from "./channels/anthropic";
 import { discordChannel } from "./channels/discord";
 import { slackChannel } from "./channels/slack";
+import { replicateVideoChannel } from "./channels/replicate-video";
+import { youtubeUploadChannel } from "./channels/youtube-upload";
 export const executeWorkflow = inngest.createFunction(
   {
     id: "execute-workflow",
@@ -41,6 +43,8 @@ export const executeWorkflow = inngest.createFunction(
       anthropicChannel(),
       discordChannel(),
       slackChannel(),
+      replicateVideoChannel(),
+      youtubeUploadChannel(),
     ],
   },
   async ({ event, step, publish }) => {

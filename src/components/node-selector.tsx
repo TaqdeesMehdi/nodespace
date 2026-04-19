@@ -79,6 +79,18 @@ const executionNodes: NodeTypeOption[] = [
     description: "Get updated to your slack channel",
     icon: "/slack.svg",
   },
+  {
+    type: NodeType.REPLICATE_VIDEO,
+    label: "Replicate",
+    description: "Create high frames AI videos",
+    icon: "/replicate.svg",
+  },
+  {
+    type: NodeType.YOUTUBE_UPLOAD,
+    label: "Youtube",
+    description: "Uploaded videos to your youtube",
+    icon: "/Youtube.svg",
+  },
 ];
 
 interface NodeSelectorProps {
