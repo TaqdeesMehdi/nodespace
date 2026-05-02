@@ -4,22 +4,12 @@ import prisma from "@/lib/db";
 import { topologicalSort } from "./utils";
 import { ExecutionStatus, NodeType } from "@/generated/prisma/enums";
 import { getExecutor } from "@/features/executions/lib/executor-registry";
-import { httpRequestChannel } from "./channels/http-request";
-import { manualTriggerChannel } from "./channels/manual-trigger";
-import { googleFormTriggerChannel } from "./channels/google-form-trigger";
-import { stripeTriggerChannel } from "./channels/stripe-trigger";
-import { geminiChannel } from "./channels/gemini";
-import { openAiChannel } from "./channels/openai";
-import { anthropicChannel } from "./channels/anthropic";
-import { discordChannel } from "./channels/discord";
-import { slackChannel } from "./channels/slack";
-import { replicateVideoChannel } from "./channels/replicate-video";
-import { youtubeUploadChannel } from "./channels/youtube-upload";
+
 export const executeWorkflow = inngest.createFunction(
   {
     id: "execute-workflow",
-    //TODO:remove in production
     retries: 0,
+    triggers: [{ event: "workflows/execute.workflow" }],
     onFailure: async ({ event, step }) => {
       await prisma.execution.update({
         where: { inngestEventId: event.data.event.id },
@@ -31,59 +21,39 @@ export const executeWorkflow = inngest.createFunction(
       });
     },
   },
-  {
-    event: "workflows/execute.workflow",
-    channels: [
-      httpRequestChannel(),
-      manualTriggerChannel(),
-      googleFormTriggerChannel(),
-      stripeTriggerChannel(),
-      geminiChannel(),
-      openAiChannel(),
-      anthropicChannel(),
-      discordChannel(),
-      slackChannel(),
-      replicateVideoChannel(),
-      youtubeUploadChannel(),
-    ],
-  },
-  async ({ event, step, publish }) => {
+  async ({ event, step }) => {
     const inngestEventId = event.id;
-
     const workflowId = event.data.workflowId;
+
     if (!inngestEventId || !workflowId) {
       throw new NonRetriableError("Event ID or Workflow ID is missing");
     }
+
     await step.run("create-execution", async () => {
       return prisma.execution.create({
-        data: {
-          workflowId,
-          inngestEventId,
-        },
+        data: { workflowId, inngestEventId },
       });
     });
+
     const sortedNodes = await step.run("prepare-workflow", async () => {
       const workflow = await prisma.workflow.findUniqueOrThrow({
         where: { id: workflowId },
-        include: {
-          nodes: true,
-          connections: true,
-        },
+        include: { nodes: true, connections: true },
       });
       return topologicalSort(workflow.nodes, workflow.connections);
     });
+
     const userId = await step.run("find-user-id", async () => {
       const workflow = await prisma.workflow.findUniqueOrThrow({
         where: { id: workflowId },
-        select: {
-          userId: true,
-        },
+        select: { userId: true },
       });
       return workflow.userId;
     });
-    //initialize the context with any initial data from the trigger
+
     let context = event.data.initialData || {};
-    //execute each node
+    const publish = inngest.realtime.publish;
+
     for (const node of sortedNodes) {
       const executor = getExecutor(node.type as NodeType);
       context = await executor({
@@ -95,6 +65,7 @@ export const executeWorkflow = inngest.createFunction(
         publish,
       });
     }
+
     await step.run("update-execution", async () => {
       return prisma.execution.update({
         where: { inngestEventId, workflowId },
@@ -105,6 +76,7 @@ export const executeWorkflow = inngest.createFunction(
         },
       });
     });
+
     return { workflowId, result: context };
   },
 );

@@ -1,5 +1,5 @@
-import type { Realtime } from "@inngest/realtime";
-import { useInngestSubscription } from "@inngest/realtime/hooks";
+import type { Realtime } from "inngest/realtime";
+import { subscribe } from "inngest/realtime";
 import { useEffect, useState } from "react";
 import type { NodeStatus } from "@/components/react-flow/node-status-indicator";
 
@@ -18,36 +18,46 @@ export function useNodeStatus({
 }: UseNodeStatusOptions) {
   const [status, setStatus] = useState<NodeStatus>("initial");
 
-  const { data } = useInngestSubscription({
-    refreshToken,
-    enabled: true,
-  });
-
   useEffect(() => {
-    if (!data?.length) {
-      return;
-    }
-    //find the latest message for this node
-    const latestMessage = data
-      .filter(
-        (msg) =>
-          msg.kind === "data" &&
-          msg.channel === channel &&
-          msg.topic === topic &&
-          msg.data.nodeId === nodeId,
-      )
-      .sort((a, b) => {
-        if (a.kind === "data" && b.kind === "data") {
-          return (
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
+    let isActive = true;
+    let subscription: Realtime.Subscribe.CallbackSubscription | null = null;
+
+    const startSubscription = async () => {
+      try {
+        const token = await refreshToken();
+        if (!isActive) {
+          return;
         }
-        return 0;
-      })[0];
-    if (latestMessage?.kind === "data") {
-      setStatus(latestMessage.data.status as NodeStatus);
-    }
-  }, [data, nodeId, channel, topic]);
+
+        subscription = await subscribe({
+          ...token,
+          onMessage: (message) => {
+            if (!isActive || message.kind !== "data") {
+              return;
+            }
+            if (message.channel !== channel || message.topic !== topic) {
+              return;
+            }
+            if (message.data.nodeId !== nodeId) {
+              return;
+            }
+            setStatus(message.data.status as NodeStatus);
+          },
+        });
+      } catch {
+        if (isActive) {
+          setStatus("initial");
+        }
+      }
+    };
+
+    startSubscription();
+
+    return () => {
+      isActive = false;
+      subscription?.unsubscribe();
+    };
+  }, [channel, nodeId, refreshToken, topic]);
 
   return status;
 }

@@ -7,18 +7,14 @@ export const stripeTriggerExecutor: NodeExecutor<StripeTriggerData> = async ({
   step,
   publish,
 }) => {
-  await publish(
-    stripeTriggerChannel().status({
-      nodeId,
-      status: "loading",
-    }),
-  );
+  await publish(stripeTriggerChannel.status, {
+    nodeId,
+    status: "loading",
+  });
   const result = await step.run("stripe-trigger", async () => context);
-  await publish(
-    stripeTriggerChannel().status({
-      nodeId,
-      status: "success",
-    }),
-  );
+  await publish(stripeTriggerChannel.status, {
+    nodeId,
+    status: "success",
+  });
   return result;
 };

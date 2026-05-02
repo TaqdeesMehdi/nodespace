@@ -1,12 +1,15 @@
-import { channel, topic } from "@inngest/realtime";
+import { realtime, staticSchema } from "inngest";
 
 export const REPLICATE_VIDEO_CHANNEL_NAME = "replicate-video-execution";
 
-export const replicateVideoChannel = channel(
-  REPLICATE_VIDEO_CHANNEL_NAME,
-).addTopic(
-  topic("status").type<{
-    nodeId: string;
-    status: "loading" | "success" | "error";
-  }>(),
-);
+export const replicateVideoChannel = realtime.channel({
+  name: REPLICATE_VIDEO_CHANNEL_NAME,
+  topics: {
+    status: {
+      schema: staticSchema<{
+        nodeId: string;
+        status: "loading" | "success" | "error";
+      }>(),
+    },
+  },
+});

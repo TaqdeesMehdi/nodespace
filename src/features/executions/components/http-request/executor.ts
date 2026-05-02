@@ -29,44 +29,36 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
   step,
   publish,
 }) => {
-  await publish(
-    httpRequestChannel().status({
-      nodeId,
-      status: "loading",
-    }),
-  );
+  await publish(httpRequestChannel.status, {
+    nodeId,
+    status: "loading",
+  });
 
   try {
     const result = await step.run("http-request", async () => {
       if (!data.endpoint) {
-        await publish(
-          httpRequestChannel().status({
-            nodeId,
-            status: "error",
-          }),
-        );
+        await publish(httpRequestChannel.status, {
+          nodeId,
+          status: "error",
+        });
         throw new NonRetriableError(
           "HTTP Request node: No endpoint configured",
         );
       }
       if (!data.variableName) {
-        await publish(
-          httpRequestChannel().status({
-            nodeId,
-            status: "error",
-          }),
-        );
+        await publish(httpRequestChannel.status, {
+          nodeId,
+          status: "error",
+        });
         throw new NonRetriableError(
           "Variable Name is not configured for this http request",
         );
       }
       if (!data.method) {
-        await publish(
-          httpRequestChannel().status({
-            nodeId,
-            status: "error",
-          }),
-        );
+        await publish(httpRequestChannel.status, {
+          nodeId,
+          status: "error",
+        });
         throw new NonRetriableError("Method not configured");
       }
       const endpoint = Handlebars.compile(data.endpoint, { noEscape: true })(
@@ -102,20 +94,16 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
         [data.variableName]: responsePayload,
       };
     });
-    await publish(
-      httpRequestChannel().status({
-        nodeId,
-        status: "success",
-      }),
-    );
+    await publish(httpRequestChannel.status, {
+      nodeId,
+      status: "success",
+    });
     return result;
   } catch (error) {
-    await publish(
-      httpRequestChannel().status({
-        nodeId,
-        status: "error",
-      }),
-    );
+    await publish(httpRequestChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw error;
   }
 };

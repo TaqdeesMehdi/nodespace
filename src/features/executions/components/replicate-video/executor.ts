@@ -34,22 +34,37 @@ export const replicateVideoExecutor: NodeExecutor<ReplicateVideoData> = async ({
   step,
   publish,
 }) => {
-  await publish(replicateVideoChannel().status({ nodeId, status: "loading" }));
+  await publish(replicateVideoChannel.status, {
+    nodeId,
+    status: "loading",
+  });
 
   if (!data.variableName) {
-    await publish(replicateVideoChannel().status({ nodeId, status: "error" }));
+    await publish(replicateVideoChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError("Replicate node: Variable Name is missing!");
   }
   if (!data.credentialId) {
-    await publish(replicateVideoChannel().status({ nodeId, status: "error" }));
+    await publish(replicateVideoChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError("Replicate node: Credential is required!");
   }
   if (!data.model) {
-    await publish(replicateVideoChannel().status({ nodeId, status: "error" }));
+    await publish(replicateVideoChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError("Replicate node: Model is required!");
   }
   if (!data.prompt) {
-    await publish(replicateVideoChannel().status({ nodeId, status: "error" }));
+    await publish(replicateVideoChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError("Replicate node: Prompt is required!");
   }
 
@@ -60,7 +75,10 @@ export const replicateVideoExecutor: NodeExecutor<ReplicateVideoData> = async ({
   });
 
   if (!credential) {
-    await publish(replicateVideoChannel().status({ nodeId, status: "error" }));
+    await publish(replicateVideoChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError("Replicate node: Credential not found");
   }
 
@@ -123,11 +141,17 @@ export const replicateVideoExecutor: NodeExecutor<ReplicateVideoData> = async ({
   });
 
   if (!videoUrl) {
-    await publish(replicateVideoChannel().status({ nodeId, status: "error" }));
+    await publish(replicateVideoChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError("Replicate node: No video URL found.");
   }
 
-  await publish(replicateVideoChannel().status({ nodeId, status: "success" }));
+  await publish(replicateVideoChannel.status, {
+    nodeId,
+    status: "success",
+  });
 
   return {
     ...context,

@@ -26,20 +26,16 @@ export const discordExecutor: NodeExecutor<DiscordData> = async ({
   step,
   publish,
 }) => {
-  await publish(
-    discordChannel().status({
-      nodeId,
-      status: "loading",
-    }),
-  );
+  await publish(discordChannel.status, {
+    nodeId,
+    status: "loading",
+  });
 
   if (!data.content) {
-    await publish(
-      discordChannel().status({
-        nodeId,
-        status: "error",
-      }),
-    );
+    await publish(discordChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError("Discord node: Message content is required");
   }
 
@@ -52,12 +48,10 @@ export const discordExecutor: NodeExecutor<DiscordData> = async ({
   try {
     const result = await step.run("discord-webhook", async () => {
       if (!data.webhookUrl) {
-        await publish(
-          discordChannel().status({
-            nodeId,
-            status: "error",
-          }),
-        );
+        await publish(discordChannel.status, {
+          nodeId,
+          status: "error",
+        });
         throw new NonRetriableError("Discord node: Webhook URL is required");
       }
 
@@ -69,12 +63,10 @@ export const discordExecutor: NodeExecutor<DiscordData> = async ({
       });
 
       if (!data.variableName) {
-        await publish(
-          discordChannel().status({
-            nodeId,
-            status: "error",
-          }),
-        );
+        await publish(discordChannel.status, {
+          nodeId,
+          status: "error",
+        });
         throw new NonRetriableError("Discord node: Variable name is missing");
       }
 
@@ -86,21 +78,17 @@ export const discordExecutor: NodeExecutor<DiscordData> = async ({
       };
     });
 
-    await publish(
-      discordChannel().status({
-        nodeId,
-        status: "success",
-      }),
-    );
+    await publish(discordChannel.status, {
+      nodeId,
+      status: "success",
+    });
 
     return result;
   } catch (error) {
-    await publish(
-      discordChannel().status({
-        nodeId,
-        status: "error",
-      }),
-    );
+    await publish(discordChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw error;
   }
 };

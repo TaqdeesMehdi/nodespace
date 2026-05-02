@@ -47,27 +47,37 @@ export const youtubeUploadExecutor: NodeExecutor<YoutubeUploadData> = async ({
   step,
   publish,
 }) => {
-  await publish(
-    youtubeUploadChannel().status({
-      nodeId,
-      status: "loading",
-    }),
-  );
+  await publish(youtubeUploadChannel.status, {
+    nodeId,
+    status: "loading",
+  });
 
   if (!data.variableName) {
-    await publish(youtubeUploadChannel().status({ nodeId, status: "error" }));
+    await publish(youtubeUploadChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError("YouTube node: Variable Name is missing!");
   }
   if (!data.credentialId) {
-    await publish(youtubeUploadChannel().status({ nodeId, status: "error" }));
+    await publish(youtubeUploadChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError("YouTube node: Credential is required!");
   }
   if (!data.videoUrl) {
-    await publish(youtubeUploadChannel().status({ nodeId, status: "error" }));
+    await publish(youtubeUploadChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError("YouTube node: Video URL is required!");
   }
   if (!data.title) {
-    await publish(youtubeUploadChannel().status({ nodeId, status: "error" }));
+    await publish(youtubeUploadChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError("YouTube node: Title is required!");
   }
 
@@ -75,7 +85,10 @@ export const youtubeUploadExecutor: NodeExecutor<YoutubeUploadData> = async ({
   const clientSecret = process.env.YOUTUBE_CLIENT_SECRET;
   const redirectUri = process.env.YOUTUBE_OAUTH_REDIRECT_URI;
   if (!clientId || !clientSecret || !redirectUri) {
-    await publish(youtubeUploadChannel().status({ nodeId, status: "error" }));
+    await publish(youtubeUploadChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError(
       "YouTube node: Missing OAuth env vars (YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET, YOUTUBE_OAUTH_REDIRECT_URI)",
     );
@@ -104,13 +117,19 @@ export const youtubeUploadExecutor: NodeExecutor<YoutubeUploadData> = async ({
   });
 
   if (!credential) {
-    await publish(youtubeUploadChannel().status({ nodeId, status: "error" }));
+    await publish(youtubeUploadChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError("YouTube node: Credential not found");
   }
 
   const tokens = parseCredentialPayload(credential.value);
   if (!tokens.refreshToken) {
-    await publish(youtubeUploadChannel().status({ nodeId, status: "error" }));
+    await publish(youtubeUploadChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError(
       "YouTube node: Missing refresh token. Reconnect YouTube account.",
     );
@@ -119,7 +138,10 @@ export const youtubeUploadExecutor: NodeExecutor<YoutubeUploadData> = async ({
   const download = await ky(resolvedVideoUrl, { throwHttpErrors: false });
 
   if (!download.ok || !download.body) {
-    await publish(youtubeUploadChannel().status({ nodeId, status: "error" }));
+    await publish(youtubeUploadChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw new NonRetriableError(
       `YouTube node: Cannot fetch video from URL (${download.status})`,
     );
@@ -174,12 +196,10 @@ export const youtubeUploadExecutor: NodeExecutor<YoutubeUploadData> = async ({
       );
     }
 
-    await publish(
-      youtubeUploadChannel().status({
-        nodeId,
-        status: "success",
-      }),
-    );
+    await publish(youtubeUploadChannel.status, {
+      nodeId,
+      status: "success",
+    });
 
     return {
       ...context,
@@ -191,12 +211,10 @@ export const youtubeUploadExecutor: NodeExecutor<YoutubeUploadData> = async ({
       },
     };
   } catch (error) {
-    await publish(
-      youtubeUploadChannel().status({
-        nodeId,
-        status: "error",
-      }),
-    );
+    await publish(youtubeUploadChannel.status, {
+      nodeId,
+      status: "error",
+    });
     throw error;
   }
 };
