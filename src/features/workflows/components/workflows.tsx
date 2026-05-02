@@ -20,7 +20,7 @@ import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
 import { useRouter } from "next/navigation";
 import { useWorkflowParams } from "../hooks/use-workflows-params";
 import { useEntitySearch } from "@/hooks/use-entity-search";
-import type { WorkflowModel } from "@/generated/prisma";
+import type { WorkflowModel } from "@/generated/prisma/models";
 import { WorkflowIcon } from "lucide-react";
 export const WorkflowsSearch = () => {
   const [params, setParams] = useWorkflowParams();

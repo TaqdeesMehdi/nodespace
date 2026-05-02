@@ -1,7 +1,7 @@
 import toposort from "toposort";
 import { NonRetriableError } from "inngest";
 import { createId } from "@paralleldrive/cuid2";
-import { NodeModel, ConnectionModel } from "@/generated/prisma";
+import { NodeModel, ConnectionModel } from "@/generated/prisma/models";
 import { inngest } from "./client";
 export const topologicalSort = (
   nodes: NodeModel[],

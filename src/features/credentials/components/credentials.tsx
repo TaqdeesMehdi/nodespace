@@ -19,8 +19,8 @@ import {
 import { useRouter } from "next/navigation";
 import { useCredentialParams } from "../hooks/use-credentials-params";
 import { useEntitySearch } from "@/hooks/use-entity-search";
-import type { CredentialModel } from "@/generated/prisma";
-import { CredentialType } from "@/generated/prisma";
+import type { CredentialModel } from "@/generated/prisma/models";
+import { CredentialType } from "@/generated/prisma/enums";
 import Image from "next/image";
 
 export const CredentialsSearch = () => {

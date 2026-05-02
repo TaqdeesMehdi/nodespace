@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
-import { CredentialType } from "@/generated/prisma";
+import { CredentialType } from "@/generated/prisma/enums";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { google } from "googleapis";

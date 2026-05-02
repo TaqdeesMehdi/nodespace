@@ -12,7 +12,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { createId } from "@paralleldrive/cuid2";
-import { NodeType } from "@/generated/prisma";
+import { NodeType } from "@/generated/prisma/enums";
 import { Separator } from "./ui/separator";
 
 export type NodeTypeOption = {
