@@ -8,7 +8,7 @@ import { getExecutor } from "@/features/executions/lib/executor-registry";
 export const executeWorkflow = inngest.createFunction(
   {
     id: "execute-workflow",
-    retries: 0,
+    retries: process.env.NODE_ENV === "production" ? 2 : 0,
     triggers: [{ event: "workflows/execute.workflow" }],
     onFailure: async ({ event, step }) => {
       await prisma.execution.update({
