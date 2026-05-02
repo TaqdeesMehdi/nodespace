@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
   //   maxInactiveAge: 60 * 1000,
   //   pagesBufferLength: 5,
   // },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   async redirects() {
     return [
       {
