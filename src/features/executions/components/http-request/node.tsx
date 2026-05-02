@@ -7,7 +7,7 @@ import { HttpRequestFormValues, HttpRequestDialog } from "./dialog";
 import { useNodeStatus } from "../../hooks/use-node-status";
 // import { httpRequestChannel } from "@/inngest/channels/http-request";
 import { fetchHttpRequestRealtimeToken } from "./actions";
-import { HTTP_REQUEST_CHANNEL_NAME } from "@/inngest/channels/http-request";
+import { HTTP_REQUEST_CHANNEL_NAME } from "@/lib/channel-constants";
 type HttpRequestNodeData = {
   variableName?: string;
   endpoint?: string;

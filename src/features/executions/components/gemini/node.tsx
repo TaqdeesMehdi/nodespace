@@ -5,7 +5,7 @@ import { BaseExecutionNode } from "../base-execution-node";
 import { GeminiFormValues, GeminiDialog } from "./dialog";
 import { useNodeStatus } from "../../hooks/use-node-status";
 import { fetchGeminiRealtimeToken } from "./actions";
-import { GEMINI_CHANNEL_NAME } from "@/inngest/channels/gemini";
+import { GEMINI_CHANNEL_NAME } from "@/lib/channel-constants";
 type GeminiNodeData = {
   variableName?: string;
   credentialId?: string;

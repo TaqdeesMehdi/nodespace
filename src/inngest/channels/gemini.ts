@@ -1,6 +1,5 @@
 import { realtime, staticSchema } from "inngest";
-
-export const GEMINI_CHANNEL_NAME = "gemini-execution";
+import { GEMINI_CHANNEL_NAME } from "@/lib/channel-constants";
 
 export const geminiChannel = realtime.channel({
   name: GEMINI_CHANNEL_NAME,

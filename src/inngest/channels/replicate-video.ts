@@ -1,6 +1,5 @@
 import { realtime, staticSchema } from "inngest";
-
-export const REPLICATE_VIDEO_CHANNEL_NAME = "replicate-video-execution";
+import { REPLICATE_VIDEO_CHANNEL_NAME } from "@/lib/channel-constants";
 
 export const replicateVideoChannel = realtime.channel({
   name: REPLICATE_VIDEO_CHANNEL_NAME,

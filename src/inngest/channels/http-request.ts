@@ -1,7 +1,6 @@
 import { realtime, staticSchema } from "inngest";
 
-export const HTTP_REQUEST_CHANNEL_NAME = "http-request-execution";
-
+import { HTTP_REQUEST_CHANNEL_NAME } from "@/lib/channel-constants";
 export const httpRequestChannel = realtime.channel({
   name: HTTP_REQUEST_CHANNEL_NAME,
   topics: {

@@ -5,7 +5,7 @@ import { BaseExecutionNode } from "../base-execution-node";
 import { AnthropicFormValues, AnthropicDialog } from "./dialog";
 import { useNodeStatus } from "../../hooks/use-node-status";
 import { fetchAnthropicRealtimeToken } from "./actions";
-import { ANTHROPIC_CHANNEL_NAME } from "@/inngest/channels/anthropic";
+import { ANTHROPIC_CHANNEL_NAME } from "@/lib/channel-constants";
 type AnthropicNodeData = {
   variableName?: string;
   credentialId?: string;

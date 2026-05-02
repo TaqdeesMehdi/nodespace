@@ -1,6 +1,5 @@
 import { realtime, staticSchema } from "inngest";
-
-export const GOOGLE_FORM_TRIGGER_CHANNEL_NAME = "google-form-trigger-execution";
+import {GOOGLE_FORM_TRIGGER_CHANNEL_NAME} from '@/lib/channel-constants'
 
 export const googleFormTriggerChannel = realtime.channel({
   name: GOOGLE_FORM_TRIGGER_CHANNEL_NAME,

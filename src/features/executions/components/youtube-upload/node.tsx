@@ -6,7 +6,7 @@ import { BaseExecutionNode } from "../base-execution-node";
 import { YoutubeUploadDialog, YoutubeUploadFormValues } from "./dialog";
 import { useNodeStatus } from "../../hooks/use-node-status";
 import { fetchYoutubeUploadRealtimeToken } from "./actions";
-import { YOUTUBE_UPLOAD_CHANNEL_NAME } from "@/inngest/channels/youtube-upload";
+import { YOUTUBE_UPLOAD_CHANNEL_NAME } from "@/lib/channel-constants";
 
 type YoutubeUploadNodeData = {
   variableName?: string;

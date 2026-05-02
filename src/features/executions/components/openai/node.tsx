@@ -5,7 +5,7 @@ import { BaseExecutionNode } from "../base-execution-node";
 import { OpenAiFormValues, OpenAiDialog } from "./dialog";
 import { useNodeStatus } from "../../hooks/use-node-status";
 import { fetchOpenAiRealtimeToken } from "./actions";
-import { OPENAI_CHANNEL_NAME } from "@/inngest/channels/openai";
+import { OPENAI_CHANNEL_NAME } from "@/lib/channel-constants";
 type OpenAiNodeData = {
   variableName?: string;
   credentialId?: string;

@@ -6,7 +6,7 @@ import { BaseExecutionNode } from "../base-execution-node";
 import { ReplicateVideoDialog, ReplicateVideoFormValues } from "./dialog";
 import { useNodeStatus } from "../../hooks/use-node-status";
 import { fetchReplicateVideoRealtimeToken } from "./actions";
-import { REPLICATE_VIDEO_CHANNEL_NAME } from "@/inngest/channels/replicate-video";
+import { REPLICATE_VIDEO_CHANNEL_NAME } from "@/lib/channel-constants";
 
 type ReplicateVideoNodeData = {
   variableName?: string;

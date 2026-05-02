@@ -1,0 +1,11 @@
+export const ANTHROPIC_CHANNEL_NAME = "anthropic-execution";
+export const DISCORD_CHANNEL_NAME = "discord-execution";
+export const GEMINI_CHANNEL_NAME = "gemini-execution";
+export const GOOGLE_FORM_TRIGGER_CHANNEL_NAME = "google-form-trigger-execution";
+export const HTTP_REQUEST_CHANNEL_NAME = "http-request-execution";
+export const MANUAL_TRIGGER_CHANNEL_NAME = "manual-trigger-execution";
+export const OPENAI_CHANNEL_NAME = "openai-execution";
+export const REPLICATE_VIDEO_CHANNEL_NAME = "replicate-video-execution";
+export const SLACK_CHANNEL_NAME = "slack-execution";
+export const STRIPE_TRIGGER_CHANNEL_NAME = "stripe-trigger-execution";
+export const YOUTUBE_UPLOAD_CHANNEL_NAME = "youtube-upload-execution";

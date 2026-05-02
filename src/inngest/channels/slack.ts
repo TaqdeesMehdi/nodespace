@@ -1,7 +1,6 @@
 import { realtime, staticSchema } from "inngest";
 
-export const SLACK_CHANNEL_NAME = "slack-execution";
-
+import { SLACK_CHANNEL_NAME } from "@/lib/channel-constants";
 export const slackChannel = realtime.channel({
   name: SLACK_CHANNEL_NAME,
   topics: {

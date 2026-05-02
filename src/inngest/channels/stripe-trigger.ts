@@ -1,7 +1,5 @@
 import { realtime, staticSchema } from "inngest";
-
-export const STRIPE_TRIGGER_CHANNEL_NAME = "stripe-trigger-execution";
-
+import { STRIPE_TRIGGER_CHANNEL_NAME } from "@/lib/channel-constants";
 export const stripeTriggerChannel = realtime.channel({
   name: STRIPE_TRIGGER_CHANNEL_NAME,
   topics: {

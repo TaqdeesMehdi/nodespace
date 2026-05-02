@@ -1,6 +1,6 @@
 import { realtime, staticSchema } from "inngest";
 
-export const DISCORD_CHANNEL_NAME = "discord-execution";
+import {DISCORD_CHANNEL_NAME} from '@/lib/channel-constants'
 
 export const discordChannel = realtime.channel({
   name: DISCORD_CHANNEL_NAME,
